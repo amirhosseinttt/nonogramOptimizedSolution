@@ -1,25 +1,25 @@
 package utils;
+
 import java.util.ArrayList;
 
 public class Map {
     private Cell[][] table;
-    private ArrayList<Integer>[] conditions;
+    private int[][] conditions;
     private int dimension;
 
 
 
-
-    /*   x:  0  1  2  3  4  5  6  7  8  9
+    /*   y:  0  1  2  3  4  5  6  7  8  9
      *      -------------------------------
-     * y:0  |  |  |  |  |  |  |  |  |  |  |
+     * x:0  |  |  |  |  |  |  |  |  |  |  |
      *      -------------------------------
-     * y:1  |  |  |  |  |  |  |  |  |  |  |
+     * x:1  |  |  |  |  |  |  |  |  |  |  |
      *      -------------------------------
-     * y:2  |  |  |  |  |  |  |  |  |  |  |
+     * x:2  |  |  |  |  |  |  |  |  |  |  |
      *      -------------------------------
-     * y:3  |  |  |  |  |  |  |  |  |  |  |
+     * x:3  |  |  |  |  |  |  |  |  |  |  |
      *      -------------------------------
-     * y:4  |  |  |  |  |  |  |  |  |  |  |
+     * x:4  |  |  |  |  |  |  |  |  |  |  |
      *      -------------------------------
      *
      *
@@ -29,7 +29,7 @@ public class Map {
      * */
 
 
-    public Map(int dimension, ArrayList<Integer>[] conditions) {
+    public Map(int dimension, int[][] conditions) {
         // creating the table and filling cells arguments are the main task of this constructor
         this.conditions = conditions;
         this.dimension = dimension;
@@ -39,7 +39,6 @@ public class Map {
                 this.table[i][j] = new Cell(i, j);
             }
         }
-
     }
 
     private void initCell(int x, int y) {
@@ -65,31 +64,119 @@ public class Map {
 
     public void print() {
         // this is a function in which we visualize the table in an user friendly way... :)
-
+        for (Cell[] rows : this.table) {
+            for (Cell cell : rows) {
+                System.out.print(cell);
+            }
+            System.out.println();
+        }
     }
 
-    public ArrayList<Integer> getCondition(int x, int y) {
-        // one of entries is always -1 and the other one is something between 0 and the dimension variable
-
-        return null;
+    public int[] getRowCondition(int x) {
+        return conditions[x].length > 0 ? conditions[x] : null;
     }
 
-    public boolean isAcceptable(){
+    public int[] getColCondition(int y) {
+        return conditions[dimension + y].length > 0 ? conditions[dimension + y] : null;
+    }
+
+    public boolean isAcceptable() {
         // this method looks at the table and conditions and returns true if conditions are satisfied.
         // Notice (Important)---> difference with isComplete() is that this function returns true even for an all empty..
         // table because an empty table does not violate any condition
 
+        //check rowCondition
+        for (int i = 0; i < dimension; i++) {
+            if (!checkAcceptableLine(this.table[i], conditions[i])) {
+                return false;
+            }
+        }
+
+        //check colCondition
+        for (int i = 0; i < dimension; i++) {
+            if (!checkAcceptableLine(getColumn(this.table, i), conditions[i])) {
+                return false;
+            }
+        }
+
         return false;
     }
 
-    public boolean isComplete(){
+    public boolean checkAcceptableLine(Cell[] line, int[] condition) {
+        Integer[] consecutiveBlackCells = getConsecutiveBlackCells(line);
+        if (condition.length < consecutiveBlackCells.length) {
+            return false;
+        }
+        for (int i = 0; i < consecutiveBlackCells.length; i++) {
+            if (consecutiveBlackCells[i] > condition[i]) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean checkCompleteLine(Cell[] line, int[] condition) {
+        Integer[] consecutiveBlackCells = getConsecutiveBlackCells(line);
+        if (condition.length != consecutiveBlackCells.length) {
+            return false;
+        }
+        for (int i = 0; i < consecutiveBlackCells.length; i++) {
+            if (consecutiveBlackCells[i] != condition[i]) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private Integer[] getConsecutiveBlackCells(Cell[] line) {
+        ArrayList<Integer> consecutiveBlackCells = new ArrayList<>();
+        for (Cell cell : line) {
+            int n = 0;
+            while (cell.isBlacked()) {
+                n++;
+            }
+            if (n > 0) {
+                consecutiveBlackCells.add(n);
+            }
+        }
+        return (Integer[]) consecutiveBlackCells.toArray();
+    }
+
+
+    private Cell[] getColumn(Cell[][] array, int index) {
+        Cell[] column = new Cell[dimension];
+        for (int i = 0; i < column.length; i++) {
+            column[i] = array[i][index];
+        }
+        return column;
+    }
+
+
+    public boolean isComplete() {
         // this method returns true if and only if the overal number of blacked cells are equal to overal sum of
         // all constrains(conditions).
+        if (!isAcceptable()) {
+            return false;
+        }
 
-        return false;
+        for (int i = 0; i < dimension; i++) {
+            if (!checkCompleteLine(this.table[i], conditions[i])) {
+                return false;
+            }
+        }
+
+        //check colCondition
+        for (int i = 0; i < dimension; i++) {
+            if (!checkCompleteLine(getColumn(this.table, i), conditions[i])) {
+                return false;
+            }
+        }
+
+        return true;
+
     }
 
-    public boolean isFinal(){
+    public boolean isFinal() {
         return this.isAcceptable() && this.isComplete();
     }
 
