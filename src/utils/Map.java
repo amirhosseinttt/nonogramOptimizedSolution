@@ -77,7 +77,6 @@ public class Map {
     }
 
     public int[] getColCondition(int y) {
-        //**** دنسدینمسدیبمنسدیبسی
         return conditions[dimension + y].length > 0 ? conditions[dimension + y] : null;
     }
 
@@ -116,19 +115,6 @@ public class Map {
         return true;
     }
 
-    public boolean checkCompleteLine(Cell[] line, int[] condition) {
-        Integer[] consecutiveBlackCells = getConsecutiveBlackCells(line);
-        if (condition.length != consecutiveBlackCells.length) {
-            return false;
-        }
-        for (int i = 0; i < consecutiveBlackCells.length; i++) {
-            if (consecutiveBlackCells[i] != condition[i]) {
-                return false;
-            }
-        }
-        return true;
-    }
-
     private Integer[] getConsecutiveBlackCells(Cell[] line) {
         ArrayList<Integer> consecutiveBlackCells = new ArrayList<>();
         for (Cell cell : line) {
@@ -157,25 +143,22 @@ public class Map {
         // this method returns true if and only if the overal number of blacked cells are equal to overal sum of
         // all constrains(conditions).
         // alert
-        if (!isAcceptable()) {
-            return false;
-        }
-
-        for (int i = 0; i < dimension; i++) {
-            if (!checkCompleteLine(this.table[i], conditions[i])) {
-                return false;
+        int count=0;
+        for (Cell[] rows : this.table) {
+            for (Cell cell : rows) {
+                if(cell.isBlacked()){
+                    count++;
+                }
             }
         }
 
-        //check colCondition
-        for (int i = 0; i < dimension; i++) {
-            if (!checkCompleteLine(getColumn(this.table, i), conditions[i])) {
-                return false;
+        for (int[] rows : conditions) {
+            for (int cell : rows) {
+                count-=cell;
             }
         }
 
-        return true;
-
+        return count==0;
     }
 
     public boolean isFinal() {
