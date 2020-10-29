@@ -77,6 +77,7 @@ public class Map {
     }
 
     public int[] getColCondition(int y) {
+        //**** دنسدینمسدیبمنسدیبسی
         return conditions[dimension + y].length > 0 ? conditions[dimension + y] : null;
     }
 
@@ -102,7 +103,7 @@ public class Map {
         return false;
     }
 
-    public boolean checkAcceptableLine(Cell[] line, int[] condition) {
+    private boolean checkAcceptableLine(Cell[] line, int[] condition) {
         Integer[] consecutiveBlackCells = getConsecutiveBlackCells(line);
         if (condition.length < consecutiveBlackCells.length) {
             return false;
@@ -155,6 +156,7 @@ public class Map {
     public boolean isComplete() {
         // this method returns true if and only if the overal number of blacked cells are equal to overal sum of
         // all constrains(conditions).
+        // alert
         if (!isAcceptable()) {
             return false;
         }

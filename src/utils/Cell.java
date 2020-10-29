@@ -6,6 +6,9 @@ public class Cell {
     private boolean isBlacked;
     private int x;
     private int y;
+    private boolean canBeBlack;
+    private boolean canBeWhite;
+
 
 
     private Cell up;
@@ -67,6 +70,30 @@ public class Cell {
 
     public int getY() {
         return y;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    public boolean isCanBeBlack() {
+        return canBeBlack;
+    }
+
+    public void setCanBeBlack(boolean canBeBlack) {
+        this.canBeBlack = canBeBlack;
+    }
+
+    public boolean isCanBeWhite() {
+        return canBeWhite;
+    }
+
+    public void setCanBeWhite(boolean canBeWhite) {
+        this.canBeWhite = canBeWhite;
     }
 
     @Override
