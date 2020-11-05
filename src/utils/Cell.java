@@ -2,14 +2,20 @@ package utils;
 
 public class Cell {
 
-
+    private boolean isSet=false;
     private boolean isBlacked;
     private int x;
     private int y;
     private boolean canBeBlack;
     private boolean canBeWhite;
 
+    public boolean isSet() {
+        return isSet;
+    }
 
+    public void setIsSet(boolean set) {
+        isSet = set;
+    }
 
     private Cell up;
     private Cell down;
@@ -80,7 +86,7 @@ public class Cell {
         this.y = y;
     }
 
-    public boolean isCanBeBlack() {
+    public boolean canBeBlack() {
         return canBeBlack;
     }
 
@@ -88,7 +94,7 @@ public class Cell {
         this.canBeBlack = canBeBlack;
     }
 
-    public boolean isCanBeWhite() {
+    public boolean canBeWhite() {
         return canBeWhite;
     }
 

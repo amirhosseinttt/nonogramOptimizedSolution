@@ -72,6 +72,10 @@ public class Map {
         }
     }
 
+    public Cell[][] getTable() {
+        return table;
+    }
+
     public int[] getRowCondition(int x) {
         return conditions[x].length > 0 ? conditions[x] : null;
     }
@@ -143,10 +147,10 @@ public class Map {
         // this method returns true if and only if the overal number of blacked cells are equal to overal sum of
         // all constrains(conditions).
         // alert
-        int count=0;
+        int count = 0;
         for (Cell[] rows : this.table) {
             for (Cell cell : rows) {
-                if(cell.isBlacked()){
+                if (cell.isBlacked()) {
                     count++;
                 }
             }
@@ -154,11 +158,11 @@ public class Map {
 
         for (int[] rows : conditions) {
             for (int cell : rows) {
-                count-=cell;
+                count -= cell;
             }
         }
 
-        return count==0;
+        return count == 0;
     }
 
     public boolean isFinal() {
