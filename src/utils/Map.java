@@ -76,12 +76,70 @@ public class Map {
         return table;
     }
 
+    public void setTable(Cell[][] table) {
+        this.table = table;
+    }
+
     public int[] getRowCondition(int x) {
         return conditions[x].length > 0 ? conditions[x] : null;
     }
 
     public int[] getColCondition(int y) {
         return conditions[dimension + y].length > 0 ? conditions[dimension + y] : null;
+    }
+
+    public int countOfColoredCellInRow(int row){
+        int count =0;
+        for (int i =0; i<this.dimension; i++ ){
+            if(table[row][i].isBlacked()){
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public int countOfCellShouldBeBlackInRow(int row){
+        int[] conditions = getRowCondition(row);
+        int sum =0;
+        for(int condition : conditions){
+            sum+=condition;
+        }
+        return sum;
+    }
+
+    public int differencesPaintedAndRemainingCell(int row){
+        return countOfCellShouldBeBlackInRow(row)-countOfColoredCellInRow( row);
+    }
+
+    public boolean isRowCompleted(int row){
+        return differencesPaintedAndRemainingCell(row)==0;
+    }
+
+    public int countOfColoredCellInCol(int col){
+        int count =0;
+        for (int i =0; i<this.dimension; i++ ){
+            if(table[i][col].isBlacked()){
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public int countOfCellShouldBeBlackInCol(int col){
+        int[] conditions = getColCondition(col);
+        int sum =0;
+        for(int condition : conditions){
+            sum+=condition;
+        }
+        return sum;
+    }
+
+    public int differencesPaintedAndRemainingCellInCol(int col){
+        return countOfCellShouldBeBlackInCol(col)-countOfColoredCellInCol( col);
+    }
+
+    public boolean isColCompleted(int col){
+        return differencesPaintedAndRemainingCellInCol(col)==0;
     }
 
     public boolean isAcceptable() {
@@ -105,6 +163,8 @@ public class Map {
 
         return false;
     }
+
+
 
     private boolean checkAcceptableLine(Cell[] line, int[] condition) {
         Integer[] consecutiveBlackCells = getConsecutiveBlackCells(line);
@@ -147,10 +207,10 @@ public class Map {
         // this method returns true if and only if the overal number of blacked cells are equal to overal sum of
         // all constrains(conditions).
         // alert
-        int count = 0;
+        int count=0;
         for (Cell[] rows : this.table) {
             for (Cell cell : rows) {
-                if (cell.isBlacked()) {
+                if(cell.isBlacked()){
                     count++;
                 }
             }
@@ -158,16 +218,30 @@ public class Map {
 
         for (int[] rows : conditions) {
             for (int cell : rows) {
-                count -= cell;
+                count-=cell;
             }
         }
 
-        return count == 0;
+        return count==0;
     }
 
     public boolean isFinal() {
         return this.isAcceptable() && this.isComplete();
     }
 
+    public int[][] getConditions() {
+        return conditions;
+    }
 
+    public void setConditions(int[][] conditions) {
+        this.conditions = conditions;
+    }
+
+    public int getDimension() {
+        return dimension;
+    }
+
+    public void setDimension(int dimension) {
+        this.dimension = dimension;
+    }
 }

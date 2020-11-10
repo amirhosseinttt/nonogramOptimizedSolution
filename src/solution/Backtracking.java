@@ -55,6 +55,40 @@ public class Backtracking {
 
     private Cell MRV(Map map) {
 
+        for(int i=0 ; i<map.getDimension(); i++){
+            if(map.differencesPaintedAndRemainingCell(i)==map.getDimension() && !map.isRowCompleted(i)){
+                Cell[] row = map.getTable()[i];
+                for(int j=0; j<row.length; j++ ){
+                    if(!row[j].isSet()){
+                        return row[j];
+                    }
+                }
+            }
+        }
+
+        int bestRow =0; ;
+        while (map.differencesPaintedAndRemainingCell(bestRow)==0 && bestRow<map.getDimension()){
+            bestRow++;
+        }
+        for (int i=0;i<map.getDimension(); i++){
+            int diff = map.differencesPaintedAndRemainingCell(i);
+            if(diff<map.differencesPaintedAndRemainingCell(bestRow) && diff>0){
+                bestRow = i;
+            }
+        }
+
+        Cell[] selectedRow = map.getTable()[bestRow];
+        int bestCell=map.getDimension()+1;
+        for (int i=0;i<map.getDimension(); i++){
+            int diff =map.differencesPaintedAndRemainingCellInCol(i);
+            if(!selectedRow[i].isSet() && diff<bestCell && diff!=0 ){
+                bestCell=i;
+            }
+        }
+        if(bestCell<map.getDimension()){
+            return selectedRow[bestCell];
+        }
+
         return null;
     }
 
@@ -85,6 +119,7 @@ public class Backtracking {
 
         }
 
+        return 0;
 
     }
 

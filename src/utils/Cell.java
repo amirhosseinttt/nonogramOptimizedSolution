@@ -9,9 +9,6 @@ public class Cell {
     private boolean canBeBlack;
     private boolean canBeWhite;
 
-    public boolean isSet() {
-        return isSet;
-    }
 
     public void setIsSet(boolean set) {
         isSet = set;
@@ -100,6 +97,23 @@ public class Cell {
 
     public void setCanBeWhite(boolean canBeWhite) {
         this.canBeWhite = canBeWhite;
+    }
+
+    public int getDomainLength(){
+        if(canBeBlack && canBeWhite){
+            return 2;
+        }else if(canBeWhite){
+            return 1;
+        }
+        return 0;
+    }
+
+    public boolean isSet() {
+        return isSet;
+    }
+
+    public void setSet(boolean isSet) {
+        this.isSet = isSet;
     }
 
     @Override
