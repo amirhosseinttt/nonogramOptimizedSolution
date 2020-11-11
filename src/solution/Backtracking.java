@@ -8,63 +8,78 @@ public class Backtracking {
 
     public boolean solve(@NotNull Map map) {
 
-        if (!map.isAcceptable()) return false;
+//        if (map.isComplete()) {
+//            if (map.isAcceptable()){
+//                map.print();
+//                return true;
+//            }
+//            return false;
+//        }
+//
+//        Cell selectedCell = MRV(map);
+//        int choice = LCV(selectedCell);
+//        boolean isSolve = solve(map);
+//        if(!isSolve){
+//            selectedCell.setIsSet(true);
+//                selectedCell.setBlacked(true);
+//                answer = solve(map);
+//                if (answer) return true;
+//                selectedCell.setIsSet(true);
+//                selectedCell.setBlacked(false);
+//                return solve(map);
+//        }
 
-        if (map.isComplete()) {
-            map.print();
-            return true;
-        }
 
 
-        Cell temp = MRV(map);
-        int choice = LCV(temp);
-
-        boolean answer = false;
-        switch (choice) {
-            case 1:
-                temp.setIsSet(true);
-                temp.setBlacked(true);
-                return solve(map);
-            case 2:
-                temp.setIsSet(true);
-                temp.setBlacked(false);
-                return solve(map);
-            case 31:
-                temp.setIsSet(true);
-                temp.setBlacked(true);
-                answer = solve(map);
-                if (answer) return true;
-                temp.setIsSet(true);
-                temp.setBlacked(false);
-                return solve(map);
-            case 32:
-                temp.setIsSet(true);
-                temp.setBlacked(false);
-                answer = solve(map);
-                if (answer) return true;
-                temp.setIsSet(true);
-                temp.setBlacked(true);
-                return solve(map);
-
-            default:
-                return false;
-
-        }
+//
+//        boolean answer = false;
+//        switch (choice) {
+//            case 1:
+//                temp.setIsSet(true);
+//                temp.setBlacked(true);
+//                return solve(map);
+//            case 2:
+//                temp.setIsSet(true);
+//                temp.setBlacked(false);
+//                return solve(map);
+//            case 31:
+//                temp.setIsSet(true);
+//                temp.setBlacked(true);
+//                answer = solve(map);
+//                if (answer) return true;
+//                temp.setIsSet(true);
+//                temp.setBlacked(false);
+//                return solve(map);
+//            case 32:
+//                temp.setIsSet(true);
+//                temp.setBlacked(false);
+//                answer = solve(map);
+//                if (answer) return true;
+//                temp.setIsSet(true);
+//                temp.setBlacked(true);
+//                return solve(map);
+//
+//            default:
+//                return false;
+//
+//        }
 
     }
 
     private Cell MRV(Map map) {
-
-        for(int i=0 ; i<map.getDimension(); i++){
-            if(map.differencesPaintedAndRemainingCell(i)==map.getDimension() && !map.isRowCompleted(i)){
-                Cell[] row = map.getTable()[i];
-                for(int j=0; j<row.length; j++ ){
-                    if(!row[j].isSet()){
-                        return row[j];
+        for (int conditionCount =map.getDimension(); conditionCount>=map.getDimension()/2 ; conditionCount-- ){
+            for(int i=0 ; i<map.getDimension(); i++){
+                if(map.differencesPaintedAndRemainingCell(i)==conditionCount && !map.isRowCompleted(i)){
+                    Cell[] row = map.getTable()[i];
+                    for(int j=0; j<row.length; j++ ){
+                        if(!row[j].isSet()){
+                            return row[j];
+                        }
                     }
                 }
             }
         }
+
 
         int bestRow =0; ;
         while (map.differencesPaintedAndRemainingCell(bestRow)==0 && bestRow<map.getDimension()){
