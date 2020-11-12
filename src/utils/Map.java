@@ -1,8 +1,11 @@
 package utils;
 
+import java.awt.image.ImageProducer;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 
-public class Map {
+public class Map implements Cloneable{
     private Cell[][] table;
     private int[][] conditions;
     private int dimension;
@@ -105,6 +108,9 @@ public class Map {
     public int countOfCellShouldBeBlackInRow(int row){
         int[] conditions = getRowCondition(row);
         int sum =0;
+        if (conditions==null){
+            return sum;
+        }
         for(int condition : conditions){
             sum+=condition;
         }
@@ -132,6 +138,9 @@ public class Map {
     public int countOfCellShouldBeBlackInCol(int col){
         int[] conditions = getColCondition(col);
         int sum =0;
+        if(conditions==null){
+            return sum;
+        }
         for(int condition : conditions){
             sum+=condition;
         }
@@ -160,19 +169,19 @@ public class Map {
 
         //check colCondition
         for (int i = 0; i < dimension; i++) {
-            if (!checkAcceptableLine(getColumn(this.table, i), conditions[i])) {
+            if (!checkAcceptableLine(getColumn(this.table, i), conditions[i+dimension])) {
                 return false;
             }
         }
 
-        return false;
+        return true;
     }
 
 
 
     private boolean checkAcceptableLine(Cell[] line, int[] condition) {
-        Integer[] consecutiveBlackCells = getConsecutiveBlackCells(line);
-        if (condition.length < consecutiveBlackCells.length) {
+        int[] consecutiveBlackCells = getConsecutiveBlackCells(line);
+        if (condition.length != consecutiveBlackCells.length) {
             return false;
         }
         for (int i = 0; i < consecutiveBlackCells.length; i++) {
@@ -183,18 +192,38 @@ public class Map {
         return true;
     }
 
-    private Integer[] getConsecutiveBlackCells(Cell[] line) {
+    private int[] getConsecutiveBlackCells(Cell[] line) {
         ArrayList<Integer> consecutiveBlackCells = new ArrayList<>();
-        for (Cell cell : line) {
-            int n = 0;
-            while (cell.isBlacked()) {
+        int n=0;
+        for (int i=0 ;  i<line.length;i++){
+            if(line[i].isBlacked()){
                 n++;
-            }
-            if (n > 0) {
-                consecutiveBlackCells.add(n);
+                continue;
+            }else{
+                if (n > 0) {
+                    consecutiveBlackCells.add(n);
+                }
+                n=0;
             }
         }
-        return (Integer[]) consecutiveBlackCells.toArray();
+        if (n>0){
+            consecutiveBlackCells.add(n);
+        }
+//        for (Cell cell : line) {
+//            int n = 0;
+//            while (cell.isBlacked()) {
+//                n++;
+//            }
+//            if (n > 0) {
+//                consecutiveBlackCells.add(n);
+//            }
+//            n=0;
+//        }
+        int[] integers = new int[consecutiveBlackCells.size()];
+        for (int i = 0;i<integers.length;i++){
+            integers[i]=consecutiveBlackCells.get(i);
+        }
+        return integers;
     }
 
 
@@ -211,22 +240,34 @@ public class Map {
         // this method returns true if and only if the overal number of blacked cells are equal to overal sum of
         // all constrains(conditions).
         // alert
-        int count=0;
-        for (Cell[] rows : this.table) {
-            for (Cell cell : rows) {
-                if(cell.isBlacked()){
-                    count++;
-                }
+//        int count=0;
+//        for (Cell[] rows : this.table) {
+//            for (Cell cell : rows) {
+//                if(cell.isBlacked()){
+//                    count++;
+//                }
+//            }
+//        }
+//
+//        for (int[] rows : conditions) {
+//            for (int cell : rows) {
+//                count-=cell;
+//            }
+//        }
+
+        for (int i=0 ; i<getDimension(); i++){
+            if(differencesPaintedAndRemainingCell(i)!=0){
+                return false;
             }
         }
 
-        for (int[] rows : conditions) {
-            for (int cell : rows) {
-                count-=cell;
+        for (int i = 0 ; i<getDimension(); i++){
+            if(differencesPaintedAndRemainingCellInCol(i)!=0){
+                return false;
             }
         }
 
-        return count==0;
+        return true;
     }
 
     @Override

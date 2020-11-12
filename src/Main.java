@@ -1,3 +1,4 @@
+import solution.Backtracking;
 import utils.Map;
 
 import java.util.Arrays;
@@ -24,6 +25,16 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        getMapFromTerminal();
+        Map map = getMapFromTerminal();
+        Backtracking backtracking = new Backtracking();
+        try {
+          System.out.println("start");
+          boolean answer =  backtracking.solve(map);
+          if (!answer){
+              System.out.println("not found");
+          }
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
     }
 }

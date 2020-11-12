@@ -1,6 +1,7 @@
 package solution;
 
 import org.jetbrains.annotations.NotNull;
+import org.w3c.dom.ls.LSOutput;
 import utils.Cell;
 import utils.Map;
 
@@ -11,62 +12,61 @@ import java.util.Collections;
 
 public class Backtracking {
 
-    public boolean solve(@NotNull Map map) {
+    static boolean isSolved = false;
+    static int a=0;
 
-//        if (map.isComplete()) {
-//            if (map.isAcceptable()){
-//                map.print();
-//                return true;
-//            }
-//            return false;
-//        }
-//
-//        Cell selectedCell = MRV(map);
-//        int choice = LCV(selectedCell);
-//        boolean isSolve = solve(map);
-//        if(!isSolve){
-//            selectedCell.setIsSet(true);
-//                selectedCell.setBlacked(true);
-//                answer = solve(map);
-//                if (answer) return true;
-//                selectedCell.setIsSet(true);
-//                selectedCell.setBlacked(false);
-//                return solve(map);
-//        }
+    public boolean solve(@NotNull Map map) throws CloneNotSupportedException {
 
+        if (isSolved){
+            return false;
+        }
 
-//
-//        boolean answer = false;
-//        switch (choice) {
-//            case 1:
-//                temp.setIsSet(true);
-//                temp.setBlacked(true);
-//                return solve(map);
-//            case 2:
-//                temp.setIsSet(true);
-//                temp.setBlacked(false);
-//                return solve(map);
-//            case 31:
-//                temp.setIsSet(true);
-//                temp.setBlacked(true);
-//                answer = solve(map);
-//                if (answer) return true;
-//                temp.setIsSet(true);
-//                temp.setBlacked(false);
-//                return solve(map);
-//            case 32:
-//                temp.setIsSet(true);
-//                temp.setBlacked(false);
-//                answer = solve(map);
-//                if (answer) return true;
-//                temp.setIsSet(true);
-//                temp.setBlacked(true);
-//                return solve(map);
-//
-//            default:
-//                return false;
-//
-//        }
+        if (map.isComplete()) {
+            if (map.isAcceptable()){
+                System.out.println("Founded!!");
+                map.print();
+                isSolved=true;
+                return true;
+            }
+            return false;
+        }
+
+        Cell selectedCell = MRV(map);
+        if (selectedCell==null){
+            return false;
+        }
+        //System.out.println( selectedCell.getX()+ " "+selectedCell.getY());
+        int choice = LCV(selectedCell,map);
+
+        boolean answer;
+        switch (choice) {
+            case 1:
+                selectedCell.setIsSet(true);
+                selectedCell.setBlacked(true);
+                return solve((Map)map.clone());
+            case 2:
+                selectedCell.setIsSet(true);
+                selectedCell.setBlacked(false);
+                return solve((Map)map.clone());
+            case 312:
+                selectedCell.setIsSet(true);
+                selectedCell.setBlacked(true);
+                answer = solve((Map)map.clone());
+                if (answer) return true;
+                selectedCell.setIsSet(true);
+                selectedCell.setBlacked(false);
+                return solve((Map)map.clone());
+            case 321:
+                selectedCell.setIsSet(true);
+                selectedCell.setBlacked(false);
+                answer = solve((Map)map.clone());
+                if (answer) return true;
+                selectedCell.setIsSet(true);
+                selectedCell.setBlacked(true);
+                return solve((Map)map.clone());
+            default:
+                return false;
+        }
 
     }
 
@@ -86,9 +86,11 @@ public class Backtracking {
 
 
         int bestRow = 0;
-        ;
-        while (map.differencesPaintedAndRemainingCell(bestRow) == 0 && bestRow < map.getDimension()) {
+        while (bestRow < map.getDimension() && map.differencesPaintedAndRemainingCell(bestRow) == 0 ) {
             bestRow++;
+        }
+        if(bestRow>=map.getDimension()){
+            return null;
         }
         for (int i = 0; i < map.getDimension(); i++) {
             int diff = map.differencesPaintedAndRemainingCell(i);
