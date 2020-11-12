@@ -6,8 +6,8 @@ public class Cell {
     private boolean isBlacked;
     private int x;
     private int y;
-    private boolean canBeBlack;
-    private boolean canBeWhite;
+    private boolean canBeBlack = true;
+    private boolean canBeWhite = true;
 
 
     public void setIsSet(boolean set) {
@@ -118,6 +118,9 @@ public class Cell {
 
     @Override
     public String toString() {
+        if (!isSet()){
+            return "?";
+        }
         return isBlacked ? "*":".";
     }
 }

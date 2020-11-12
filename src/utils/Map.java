@@ -1,9 +1,6 @@
 package utils;
 
-import java.awt.image.ImageProducer;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Map implements Cloneable{
     private Cell[][] table;
@@ -95,6 +92,10 @@ public class Map implements Cloneable{
         return conditions[dimension + y].length > 0 ? conditions[dimension + y] : null;
     }
 
+    public Cell[] getRow(int row){
+        return table[row];
+    }
+
     public int countOfColoredCellInRow(int row){
         int count =0;
         for (int i =0; i<this.dimension; i++ ){
@@ -180,7 +181,7 @@ public class Map implements Cloneable{
 
 
     private boolean checkAcceptableLine(Cell[] line, int[] condition) {
-        int[] consecutiveBlackCells = getConsecutiveBlackCells(line);
+        int[] consecutiveBlackCells = getContinuesBlackCells(line);
         if (condition.length != consecutiveBlackCells.length) {
             return false;
         }
@@ -192,7 +193,7 @@ public class Map implements Cloneable{
         return true;
     }
 
-    private int[] getConsecutiveBlackCells(Cell[] line) {
+    private int[] getContinuesBlackCells(Cell[] line) {
         ArrayList<Integer> consecutiveBlackCells = new ArrayList<>();
         int n=0;
         for (int i=0 ;  i<line.length;i++){
@@ -227,7 +228,7 @@ public class Map implements Cloneable{
     }
 
 
-    private Cell[] getColumn(Cell[][] array, int index) {
+    public Cell[] getColumn(Cell[][] array, int index) {
         Cell[] column = new Cell[dimension];
         for (int i = 0; i < column.length; i++) {
             column[i] = array[i][index];
@@ -254,6 +255,15 @@ public class Map implements Cloneable{
 //                count-=cell;
 //            }
 //        }
+
+        for (Cell[] rows : this.table) {
+            for (Cell cell : rows) {
+                if(!cell.isSet()){
+                    return false;
+                }
+            }
+        }
+
 
         for (int i=0 ; i<getDimension(); i++){
             if(differencesPaintedAndRemainingCell(i)!=0){
