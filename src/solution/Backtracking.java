@@ -260,6 +260,7 @@ public class Backtracking {
                 } else throw new Exception("this is wrong! it shouldn't be like this...");
             }
         }
+        return cells;
     }
 
     private boolean recursiveFunction(ArrayList<Integer> remainingConditions, Cell[] row, int start, Cell[] originalRow, int blackSupposedCount) {
