@@ -141,6 +141,14 @@ public class Backtracking {
                 }
             }
 
+            for (int i = 0; i < table.length; i++) {
+                Cell tmp1 = table[i][temp.getY()];
+                if (!tmp1.isSet()) {
+                    if (tmp1.canBeBlack()) domainCount1++;
+                    if (tmp1.canBeWhite()) domainCount1++;
+                }
+            }
+
 
             assert map2 != null;
             temp = map2.getCell(cell.getX(), cell.getY());
@@ -159,6 +167,13 @@ public class Backtracking {
                     if (tmp2.canBeWhite()) domainCount1++;
                 }
             }
+            for (int i = 0; i < table.length; i++) {
+                Cell tmp2 = table[i][temp.getY()];
+                if (!tmp2.isSet()) {
+                    if (tmp2.canBeBlack()) domainCount1++;
+                    if (tmp2.canBeWhite()) domainCount1++;
+                }
+            }
 
 
             if (domainCount1 < domainCount2) return 321;
@@ -170,6 +185,7 @@ public class Backtracking {
 
     private Map forwardChecking(Cell cell, Map map) {
 
+        Cell[][] table = map.getTable();
 
         return map;
     }
