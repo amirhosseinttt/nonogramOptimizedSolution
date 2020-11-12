@@ -76,6 +76,10 @@ public class Map {
         return table;
     }
 
+    public Cell getCell(int x, int y){
+        return this.table[x][y];
+    }
+
     public void setTable(Cell[][] table) {
         this.table = table;
     }
@@ -223,6 +227,11 @@ public class Map {
         }
 
         return count==0;
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 
     public boolean isFinal() {
