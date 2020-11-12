@@ -4,6 +4,11 @@ import org.jetbrains.annotations.NotNull;
 import utils.Cell;
 import utils.Map;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+
 public class Backtracking {
 
     public boolean solve(@NotNull Map map) {
@@ -185,9 +190,134 @@ public class Backtracking {
 
     private Map forwardChecking(Cell cell, Map map) {
 
+        int[] rowConditions = map.getRowCondition(cell.getX());
+        ArrayList<Integer> rowConArray = new ArrayList<Integer>();
+        for (int con : rowConditions) {
+            rowConArray.add(con);
+        }
+        int[] colConditions = map.getColCondition(cell.getY());
+        ArrayList<Integer> colConArray = new ArrayList<Integer>();
+        for (int con : colConditions) {
+            colConArray.add(con);
+        }
+
+
         Cell[][] table = map.getTable();
+        Cell[] column = table[cell.getX()];
+        Cell[] row = new Cell[column.length];
+        for (int i = 0; i < column.length; i++) {
+            row[i] = table[i][cell.getY()];
+        }
+
+        for (Cell tmpCell : column) {
+            if (!tmpCell.isSet() && tmpCell.canBeBlack() && tmpCell.canBeWhite()) {
+                tmpCell.setCanBeWhite(false);
+                tmpCell.setCanBeBlack(false);
+            }
+        }
+
+
+        Cell[] normRow = null, normCol = null;
+        try {
+            normRow = normalizeForRecursiveFunction(row.clone());
+            normCol = normalizeForRecursiveFunction(column.clone());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        int rowBlackSupposedCount = 0;
+        int colBlackSupposedCount = 0;
+
+
+        for (int tmp : rowConditions) {
+            rowBlackSupposedCount += tmp;
+        }
+        for (int tmp : colConditions) {
+            colBlackSupposedCount += tmp;
+        }
+
+
+        if (!recursiveFunction(rowConArray, normRow, 0, row, rowBlackSupposedCount) ||
+                !recursiveFunction(colConArray, normCol, 0, column, colBlackSupposedCount)) return null;
 
         return map;
+    }
+
+
+    private Cell[] normalizeForRecursiveFunction(Cell[] cells) throws Exception {
+        for (Cell tmpCell : cells) {
+            if (!tmpCell.isSet()) {
+                if (tmpCell.canBeBlack() && tmpCell.canBeWhite()) {
+                    tmpCell.setCanBeWhite(false);
+                    tmpCell.setCanBeBlack(false);
+                } else if (tmpCell.canBeBlack()) {
+                    tmpCell.setIsSet(true);
+                    tmpCell.setBlacked(true);
+                } else if (tmpCell.canBeWhite()) {
+                    tmpCell.setIsSet(true);
+                    tmpCell.setBlacked(false);
+                } else throw new Exception("this is wrong! it shouldn't be like this...");
+            }
+        }
+    }
+
+    private boolean recursiveFunction(ArrayList<Integer> remainingConditions, Cell[] row, int start, Cell[] originalRow, int blackSupposedCount) {
+        // remember to make all 2 choice domains none before calling this function.
+
+
+        if (remainingConditions.isEmpty()) {
+            int count = 0;
+            for (Cell cell : row) {
+                if (cell.isSet() && cell.isBlacked()) count++;
+            }
+
+            assert row.length == originalRow.length;
+            if (count == blackSupposedCount) {
+                for (int i = 0; i < row.length; i++) {
+                    if (row[i].isBlacked() && row[i].isSet()) {
+                        originalRow[i].setCanBeBlack(true);
+                    } else if (!row[i].isBlacked()) {
+                        originalRow[i].setCanBeWhite(true);
+                    }
+                }
+                return true;
+            } else return false;
+        }
+
+
+        int thisCondition = remainingConditions.remove(0);
+
+        int count = 0;
+
+        for (int adad : remainingConditions) {
+            count += adad + 1;
+        }
+        count += thisCondition;
+
+        boolean sw = false;
+        Task:
+        for (int i = start; i < row.length - count; i++) {
+            Cell[] temp = row.clone();
+            if (i != start && row[i].isSet() && row[i].isBlacked()) {
+                for (int j = i; j < i + thisCondition; j++) {
+
+                    if (temp[j].isSet() && !temp[j].isBlacked()) {
+                        continue Task;
+                    }
+
+                    temp[j].setIsSet(true);
+                    temp[j].setBlacked(true);
+                }
+                if (recursiveFunction(remainingConditions, temp, i + thisCondition + 1, originalRow, blackSupposedCount)) {
+                    sw = true;
+                }
+            }
+
+
+        }
+
+        return sw;
     }
 
 }
