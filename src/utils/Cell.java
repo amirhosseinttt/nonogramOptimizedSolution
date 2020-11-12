@@ -102,7 +102,7 @@ public class Cell {
     public int getDomainLength(){
         if(canBeBlack && canBeWhite){
             return 2;
-        }else if(canBeWhite){
+        }else if(canBeWhite || canBeBlack){
             return 1;
         }
         return 0;

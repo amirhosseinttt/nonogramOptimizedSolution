@@ -64,9 +64,33 @@ public class Map implements Cloneable{
 
     public void print() {
         // this is a function in which we visualize the table in an user friendly way... :)
+        System.out.println("***********************************************************************");
+        System.out.println("-----main map-----");
         for (Cell[] rows : this.table) {
             for (Cell cell : rows) {
                 System.out.print(cell);
+            }
+            System.out.println();
+        }
+        System.out.println("------cell domain------");
+        for (Cell[] rows : this.table) {
+            for (Cell cell : rows) {
+                System.out.print(cell.getDomainLength());
+            }
+            System.out.println();
+        }
+        System.out.println("----- is Black (0:false ...) ----");
+        for (Cell[] rows : this.table) {
+            for (Cell cell : rows) {
+                System.out.print(cell.isBlacked() ? "1":"0");
+            }
+            System.out.println();
+        }
+
+        System.out.println("----- is set (0:false ...) ----");
+        for (Cell[] rows : this.table) {
+            for (Cell cell : rows) {
+                System.out.print(cell.isSet() ? "1":"0");
             }
             System.out.println();
         }
