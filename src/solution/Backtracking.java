@@ -23,7 +23,8 @@ public class Backtracking {
 
         if (map.isComplete()) {
             if (map.isAcceptable()) {
-
+                System.out.println("Founded!!");
+                map.print();
                 System.out.println("Founded!!");
 
                 isSolved = true;
