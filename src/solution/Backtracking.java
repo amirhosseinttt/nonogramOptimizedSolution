@@ -14,7 +14,6 @@ public class Backtracking {
     public static int a = 0;
 
     public boolean solve(@NotNull Map map) throws CloneNotSupportedException {
-        map.print();
         System.out.println("-------------");
 
         a++;
@@ -48,11 +47,13 @@ public class Backtracking {
 //               return solve((Map)map.clone());
         boolean answer;
 
+        Map m = null;
         switch (choice) {
+
             case 1:
                 selectedCell.setIsSet(true);
                 selectedCell.setBlacked(true);
-                Map m = forwardChecking(selectedCell, (Map) map.clone());
+                m = forwardChecking(selectedCell, (Map) map.clone());
                 if (m == null) {
                     return false;
                 }
@@ -60,7 +61,9 @@ public class Backtracking {
             case 2:
                 selectedCell.setIsSet(true);
                 selectedCell.setBlacked(false);
+                map.print();
                 m = forwardChecking(selectedCell, (Map) map.clone());
+                m.print();
                 if (m == null) {
                     return false;
                 }
@@ -186,12 +189,10 @@ public class Backtracking {
         if (cell.canBeBlack() && !cell.canBeWhite()) {
             System.out.println("just black");
             return 1;
-        }
-        else if (!cell.canBeBlack() && cell.canBeWhite()) {
+        } else if (!cell.canBeBlack() && cell.canBeWhite()) {
             System.out.println("just white");
             return 2;
-        }
-        else if (!cell.canBeWhite() && !cell.canBeBlack()) {
+        } else if (!cell.canBeWhite() && !cell.canBeBlack()) {
             System.err.println("something went wrong. it shouldn't be like this!");
             return -1;
         } else {
@@ -267,6 +268,7 @@ public class Backtracking {
     public static int b = 0;
 
     private Map forwardChecking(Cell cell, Map map) {
+        map.print();
         b++;
         int[] rowConditions = map.getRowCondition(cell.getX());
         ArrayList<Integer> rowConArray = new ArrayList<Integer>();
@@ -309,6 +311,7 @@ public class Backtracking {
 
         } catch (Exception e) {
             System.out.println(b);
+            map.print();
             e.printStackTrace();
         }
 
@@ -327,8 +330,15 @@ public class Backtracking {
 
         if (!recursiveFunction(rowConArray, normRow, 0, row, map.countOfCellShouldBeBlackInRow(cell.getX())) ||
                 !recursiveFunction(colConArray, normCol, 0, column, map.countOfCellShouldBeBlackInCol(cell.getY())))
+        {
+            for (int i=0;i<10;i++){
+                System.out.println("nuuuuuuuuuuuuuuuuul");
+            }
             return null;
 
+        }
+        System.out.println("returned map------------->>>>>>>>>");
+        map.print();
         return map;
     }
 
@@ -373,7 +383,7 @@ public class Backtracking {
                 }
                 return true;
             } else {
-                System.out.println(count+" c");
+                System.out.println(count + " c");
                 return false;
             }
         }
