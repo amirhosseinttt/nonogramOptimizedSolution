@@ -234,13 +234,13 @@ public class Backtracking {
 //            return 1;
 //        }
 
-        if (cell.canBeBlack() && !cell.canBeWhite()&& false) {
+        if (cell.canBeBlack() && !cell.canBeWhite()) {
             System.out.println("just black");
             return 1;
-        } else if (!cell.canBeBlack() && cell.canBeWhite() && false) {
+        } else if (!cell.canBeBlack() && cell.canBeWhite()) {
             System.out.println("just white");
             return 2;
-        } else if (!cell.canBeWhite() && !cell.canBeBlack() && false) {
+        } else if (!cell.canBeWhite() && !cell.canBeBlack()) {
             System.err.println("something went wrong. it shouldn't be like this!");
             return -1;
         } else {
