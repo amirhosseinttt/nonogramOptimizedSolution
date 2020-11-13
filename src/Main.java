@@ -21,10 +21,11 @@ public class Main {
                 rules[i][j]= scanner.nextInt();
             }
         }
+
         return new Map(dimension,rules);
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws CloneNotSupportedException {
         Map map = getMapFromTerminal();
         Backtracking backtracking = new Backtracking();
         try {
@@ -36,6 +37,6 @@ public class Main {
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
         }
-        System.out.println(Backtracking.a);
+       // System.out.println(Backtracking.a);
     }
 }

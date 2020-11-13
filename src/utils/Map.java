@@ -41,26 +41,33 @@ public class Map implements Cloneable{
         }
     }
 
-    private void initCell(int x, int y) {
-        // we should fill cells neighbours in here...
-
-        Cell cell = this.table[x][y];
-
-        if (x > 0) {
-            cell.setLeft(this.table[x - 1][y]);
-        }
-        if (y > 0) {
-            cell.setUp(this.table[x][y - 1]);
-        }
-        if (x < this.dimension - 1) {
-            cell.setRight(this.table[x + 1][y]);
-        }
-        if (x < this.dimension - 1) {
-            cell.setDown(this.table[x][y + 1]);
-        }
-
-        this.table[x][y] = cell;
+    public Map(int dimension, int[][] conditions,Cell[][] table) {
+        // creating the table and filling cells arguments are the main task of this constructor
+        this.conditions = conditions;
+        this.dimension = dimension;
+        this.table = table;
     }
+
+//    private void initCell(int x, int y) {
+//        // we should fill cells neighbours in here...
+//
+//        Cell cell = this.table[x][y];
+//
+//        if (x > 0) {
+//            cell.setLeft(this.table[x - 1][y]);
+//        }
+//        if (y > 0) {
+//            cell.setUp(this.table[x][y - 1]);
+//        }
+//        if (x < this.dimension - 1) {
+//            cell.setRight(this.table[x + 1][y]);
+//        }
+//        if (x < this.dimension - 1) {
+//            cell.setDown(this.table[x][y + 1]);
+//        }
+//
+//        this.table[x][y] = cell;
+//    }
 
     public void print() {
         // this is a function in which we visualize the table in an user friendly way... :)
@@ -306,7 +313,28 @@ public class Map implements Cloneable{
 
     @Override
     public Object clone() throws CloneNotSupportedException {
-        return super.clone();
+        Cell[][] cells = new Cell[dimension][dimension];
+        for(int i =0 ; i<dimension;i++){
+            for(int j =0 ; j<dimension;j++){
+                cells[i][j]= new Cell(this.table[i][j].getX(),this.table[i][j].getY());
+                cells[i][j].setCanBeWhite(this.table[i][j].canBeWhite());
+                cells[i][j].setCanBeBlack(this.table[i][j].canBeBlack());
+                cells[i][j].setBlacked(this.table[i][j].isBlacked());
+                cells[i][j].setIsSet(this.table[i][j].isSet());
+            }
+        }
+
+        int[][] rules = new int[dimension*2][];
+        for (int i =0 ; i < dimension*2 ; i++){
+            int n = this.conditions[i].length;
+            rules[i]= new int[n];
+            for (int j =0; j< n ; j++){
+                rules[i][j]= this.conditions[i][j];
+            }
+        }
+
+        Map map = new Map(dimension,conditions,cells);
+        return map;
     }
 
     public boolean isFinal() {
