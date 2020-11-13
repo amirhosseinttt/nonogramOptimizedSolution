@@ -243,74 +243,142 @@ public class Backtracking {
             System.err.println("something went wrong. it shouldn't be like this!");
             return -1;
         } else {
-            return 312;
-//            Map map1 = null, map2 = null;
-//            try {
-//                map1 = (Map) map.clone(); // for black
-//                map2 = (Map) map.clone(); // for white
-//            } catch (CloneNotSupportedException e) {
-//                e.printStackTrace();
-//            }
-//
-//            assert map1 != null;
-//            Cell temp = map1.getCell(cell.getX(), cell.getY());
-//            temp.setIsSet(true);
-//            temp.setBlacked(true);
-//            map1 = forwardChecking(temp, map1);
-//
-//            int domainCount1 = 0;
-//
-//            Cell[][] table = map1.getTable();
-//
-//            for (int i = 0; i < table.length; i++) {
-//                Cell tmp1 = table[temp.getX()][i];
-//                if (!tmp1.isSet()) {
-//                    if (tmp1.canBeBlack()) domainCount1++;
-//                    if (tmp1.canBeWhite()) domainCount1++;
-//                }
-//            }
-//
-//            for (int i = 0; i < table.length; i++) {
-//                Cell tmp1 = table[i][temp.getY()];
-//                if (!tmp1.isSet()) {
-//                    if (tmp1.canBeBlack()) domainCount1++;
-//                    if (tmp1.canBeWhite()) domainCount1++;
-//                }
-//            }
-//
-//
-//            assert map2 != null;
-//            temp = map2.getCell(cell.getX(), cell.getY());
-//            temp.setIsSet(true);
-//            temp.setBlacked(true);
-//            map2 = forwardChecking(temp, map2);
-//
-//            int domainCount2 = 0;
-//
-//            table = map2.getTable();
-//
-//            for (int i = 0; i < table.length; i++) {
-//                Cell tmp2 = table[temp.getX()][i];
-//                if (!tmp2.isSet()) {
-//                    if (tmp2.canBeBlack()) domainCount1++;
-//                    if (tmp2.canBeWhite()) domainCount1++;
-//                }
-//            }
-//            for (int i = 0; i < table.length; i++) {
-//                Cell tmp2 = table[i][temp.getY()];
-//                if (!tmp2.isSet()) {
-//                    if (tmp2.canBeBlack()) domainCount1++;
-//                    if (tmp2.canBeWhite()) domainCount1++;
-//                }
-//            }
-//
-//
-//            if (domainCount1 < domainCount2) return 321;
-//            else return 312;
+            Map map1 = null, map2 = null;
+            try {
+                map1 = (Map) map.clone(); // for black
+                map2 = (Map) map.clone(); // for white
+            } catch (CloneNotSupportedException e) {
+                e.printStackTrace();
+            }
+
+            assert map1 != null;
+            Cell temp = map1.getCell(cell.getX(), cell.getY());
+            temp.setIsSet(true);
+            temp.setBlacked(true);
+            map1 = LCVDomainResolver(temp, map1);
+
+            int domainCount1 = 0;
+
+            Cell[][] table = map1.getTable();
+
+            for (int i = 0; i < table.length; i++) {
+                Cell tmp1 = table[temp.getX()][i];
+                if (!tmp1.isSet()) {
+                    if (tmp1.canBeBlack()) domainCount1++;
+                    if (tmp1.canBeWhite()) domainCount1++;
+                }
+            }
+
+            for (int i = 0; i < table.length; i++) {
+                Cell tmp1 = table[i][temp.getY()];
+                if (!tmp1.isSet()) {
+                    if (tmp1.canBeBlack()) domainCount1++;
+                    if (tmp1.canBeWhite()) domainCount1++;
+                }
+            }
+
+
+            assert map2 != null;
+            temp = map2.getCell(cell.getX(), cell.getY());
+            temp.setIsSet(true);
+            temp.setBlacked(true);
+            map2 = LCVDomainResolver(temp, map2);
+
+            int domainCount2 = 0;
+
+            table = map2.getTable();
+
+            for (int i = 0; i < table.length; i++) {
+                Cell tmp2 = table[temp.getX()][i];
+                if (!tmp2.isSet()) {
+                    if (tmp2.canBeBlack()) domainCount1++;
+                    if (tmp2.canBeWhite()) domainCount1++;
+                }
+            }
+            for (int i = 0; i < table.length; i++) {
+                Cell tmp2 = table[i][temp.getY()];
+                if (!tmp2.isSet()) {
+                    if (tmp2.canBeBlack()) domainCount1++;
+                    if (tmp2.canBeWhite()) domainCount1++;
+                }
+            }
+
+
+            if (domainCount1 < domainCount2) return 321;
+            else return 312;
 
 
         }
     }
+
+    private Map LCVDomainResolver(Cell cell, Map map) {
+//        System.out.println("forward started");
+//        map.print();
+        b++;
+        int[] rowConditions = map.getRowCondition(cell.getX());
+        int[] colConditions = map.getColCondition(cell.getY());
+        ArrayList<Integer> rowConArray = new ArrayList<Integer>();
+        if (rowConditions != null) {
+            for (int con : rowConditions) {
+                rowConArray.add(con);
+            }
+        }
+
+        ArrayList<Integer> colConArray = new ArrayList<Integer>();
+        if (colConditions != null) {
+            for (int con : colConditions) {
+                colConArray.add(con);
+            }
+        }
+
+        Cell[][] table = map.getTable();
+        Cell[] column = map.getColumn(table, cell.getY()); //table[cell.getX()];
+        Cell[] row = map.getRow(cell.getX());
+
+        Cell[] normRow = null, normCol = null;
+        try {
+
+
+            normRow = normalizeForRecursiveFunction(utils.copyOfCellArray(row));
+
+            normCol = normalizeForRecursiveFunction(utils.copyOfCellArray(column));
+        } catch (Exception e) {
+            map.print();
+            e.printStackTrace();
+        }
+
+
+        for (Cell tmpCell : row) {
+            if (!tmpCell.isSet()) {
+                if (tmpCell.canBeBlack() && tmpCell.canBeWhite()) {
+                    tmpCell.setCanBeWhite(false);
+                    tmpCell.setCanBeBlack(false);
+                }
+            }
+        }
+        for (Cell tmpCell : column) {
+            if (!tmpCell.isSet()) {
+                if (tmpCell.canBeBlack() && tmpCell.canBeWhite()) {
+                    tmpCell.setCanBeWhite(false);
+                    tmpCell.setCanBeBlack(false);
+                }
+            }
+        }
+
+//        System.out.println("before recursive");
+//        map.print();
+
+
+        recursiveFunction(rowConArray, normRow, 0, row, map.countOfCellShouldBeBlackInRow(cell.getX()));
+        recursiveFunction(colConArray, normCol, 0, column, map.countOfCellShouldBeBlackInCol(cell.getY()));
+
+
+//        System.out.println("returned map------------->>>>>>>>>");
+//        map.print();
+
+        return map;
+    }
+
 
     public static int b = 0;
 
@@ -337,17 +405,6 @@ public class Backtracking {
         Cell[][] table = map.getTable();
         Cell[] column = map.getColumn(table, cell.getY()); //table[cell.getX()];
         Cell[] row = map.getRow(cell.getX());
-//        for (int i = 0; i < column.length; i++) {
-//            row[i] = table[i][cell.getY()];
-//        }
-
-//        for (Cell tmpCell : column) {
-//            if (!tmpCell.isSet() && tmpCell.canBeBlack() && tmpCell.canBeWhite()) {
-//                tmpCell.setCanBeWhite(false);
-//                tmpCell.setCanBeBlack(false);
-//            }
-//        }
-
 
         Cell[] normRow = null, normCol = null;
         try {
@@ -385,8 +442,7 @@ public class Backtracking {
 
         if (!recursiveFunction(rowConArray, normRow, 0, row, map.countOfCellShouldBeBlackInRow(cell.getX())) ||
                 !recursiveFunction(colConArray, normCol, 0, column, map.countOfCellShouldBeBlackInCol(cell.getY()))) {
-            for (int i = 0; i < 10; i++) {
-            }
+
             return null;
 
         }
