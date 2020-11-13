@@ -1,5 +1,6 @@
 package utils;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -40,6 +41,7 @@ public class Map implements Cloneable{
                 this.table[i][j] = new Cell(i, j);
             }
         }
+
     }
 
     public Map(int dimension, int[][] conditions,Cell[][] table) {
@@ -73,6 +75,14 @@ public class Map implements Cloneable{
     public void print() {
         // this is a function in which we visualize the table in an user friendly way... :)
         System.out.println("***********************************************************************");
+        System.out.println("-------conditions-------");
+        for (int[] row:this.conditions){
+            for (int adad:row){
+                System.out.print(adad+" ");
+            }
+            System.out.println();
+        }
+
         System.out.println("-----main map-----");
         for (Cell[] rows : this.table) {
             for (Cell cell : rows) {
@@ -133,11 +143,14 @@ public class Map implements Cloneable{
     }
 
     public int[] getRowCondition(int x) {
+        System.out.println("x: "+x+"  arrays  "+ Arrays.toString(this.conditions[x]));
         return conditions[x].length > 0 ? conditions[x] : null;
     }
 
 
     public int[] getColCondition(int y) {
+        System.out.println("y: "+y+"  arrays  "+ Arrays.toString(this.conditions[y]));
+
         return conditions[dimension + y].length > 0 ? conditions[dimension + y] : null;
     }
 

@@ -5,8 +5,9 @@ import org.jetbrains.annotations.NotNull;
 import utils.*;
 
 
-
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Backtracking {
 
@@ -149,7 +150,7 @@ public class Backtracking {
         while (bestRow < map.getDimension() && map.isSetAllCellInRow(bestRow)) {
             bestRow++;
         }
-        if(bestRow>=map.getDimension()){
+        if (bestRow >= map.getDimension()) {
             return null;
         }
         for (int i = 0; i < map.getDimension(); i++) {
@@ -170,8 +171,6 @@ public class Backtracking {
         if (bestCell < map.getDimension()) {
             return selectedRow[bestCell];
         }
-
-
 
 
         for (Cell[] row : map.getTable()) {
@@ -320,6 +319,8 @@ public class Backtracking {
         map.print();
         b++;
         int[] rowConditions = map.getRowCondition(cell.getX());
+        int[] colConditions = map.getColCondition(cell.getY());
+        System.out.println("x: " + cell.getX() + " y: " + cell.getY());
         ArrayList<Integer> rowConArray = new ArrayList<Integer>();
         if (rowConditions != null) {
             for (int con : rowConditions) {
@@ -327,13 +328,11 @@ public class Backtracking {
             }
         }
 
-        int[] colConditions = map.getColCondition(cell.getY());
         ArrayList<Integer> colConArray = new ArrayList<Integer>();
         if (colConditions != null) {
             for (int con : colConditions) {
                 colConArray.add(con);
             }
-
         }
 
         Cell[][] table = map.getTable();
@@ -387,9 +386,8 @@ public class Backtracking {
 
 
         if (!recursiveFunction(rowConArray, normRow, 0, row, map.countOfCellShouldBeBlackInRow(cell.getX())) ||
-                !recursiveFunction(colConArray, normCol, 0, column, map.countOfCellShouldBeBlackInCol(cell.getY())))
-        {
-            for (int i=0;i<10;i++){
+                !recursiveFunction(colConArray, normCol, 0, column, map.countOfCellShouldBeBlackInCol(cell.getY()))) {
+            for (int i = 0; i < 10; i++) {
                 System.out.println("nuuuuuuuuuuuuuuuuul");
             }
             return null;
@@ -458,19 +456,19 @@ public class Backtracking {
         }
         count += thisCondition;
 
-        System.out.println("count: "+count);
+        System.out.println("count: " + count);
 
         boolean sw = false;
 
         Task:
         for (int i = start; i <= row.length - count; i++) {
             Cell[] temp = utils.copyOfCellArray(row);
-            for (int k=start;k<i;k++){
-                temp[k].setIsSet(true);
-                temp[k].setBlacked(false);
-            }
-
-            if (i==start||(i != start && !(row[i-1].isSet() && row[i-1].isBlacked()))) {
+//            for (int k = start; k < i; k++) {
+//                temp[k].setIsSet(true);
+//                temp[k].setBlacked(false);
+//            }
+            if (i > start && row[i - 1].isSet() && row[i - 1].isBlacked()) break;
+            else {
 
                 for (int j = i; j < i + thisCondition; j++) {
 
@@ -481,7 +479,8 @@ public class Backtracking {
                     temp[j].setIsSet(true);
                     temp[j].setBlacked(true);
                 }
-                if (recursiveFunction(remainingConditions, temp, i + thisCondition + 1, originalRow, blackSupposedCount)) {
+                System.out.println(Arrays.toString(temp));
+                if (recursiveFunction(utils.copyOfIntArrayList(remainingConditions), utils.copyOfCellArray(temp), i + thisCondition + 1, originalRow, blackSupposedCount)) {
                     sw = true;
                 }
             }
