@@ -41,40 +41,40 @@ public class Backtracking {
         int choice = LCV(selectedCell, (Map) map.clone());
         boolean answer;
 
-        Map m = null;
+        Map tempMap = null;
         switch (choice) {
 
             case 1:
                 selectedCell.setIsSet(true);
                 selectedCell.setBlacked(true);
-                m = forwardChecking(selectedCell, (Map) map.clone());
-                if (m == null) {
+                tempMap = forwardChecking(selectedCell, (Map) map.clone());
+                if (tempMap == null) {
                     return false;
                 }
-                return solve((Map) m.clone());
+                return solve((Map) tempMap.clone());
             case 2:
                 selectedCell.setIsSet(true);
                 selectedCell.setBlacked(false);
-                m = forwardChecking(selectedCell, (Map) map.clone());
-                if (m == null) {
+                tempMap = forwardChecking(selectedCell, (Map) map.clone());
+                if (tempMap == null) {
                     return false;
                 }
-                return solve((Map) m.clone());
+                return solve((Map) tempMap.clone());
             case 312:
                 selectedCell.setIsSet(true);
                 selectedCell.setBlacked(true);
-                m = forwardChecking(selectedCell, (Map) map.clone());
-                if (m != null) {
-                    answer = solve((Map) m);
+                tempMap = forwardChecking(selectedCell, (Map) map.clone());
+                if (tempMap != null) {
+                    answer = solve((Map) tempMap);
                     if (answer) return true;
                 }
                 selectedCell.setIsSet(true);
                 selectedCell.setBlacked(false);
-                m = forwardChecking(selectedCell, (Map) map.clone());
-                if (m == null) {
+                tempMap = forwardChecking(selectedCell, (Map) map.clone());
+                if (tempMap == null) {
                     return false;
                 }
-                answer = solve((Map) m);
+                answer = solve((Map) tempMap);
                 if (answer) {
                     return true;
                 } else {
@@ -84,18 +84,18 @@ public class Backtracking {
             case 321:
                 selectedCell.setIsSet(true);
                 selectedCell.setBlacked(false);
-                m = forwardChecking(selectedCell, (Map) map.clone());
-                if (m != null) {
-                    answer = solve((Map) m);
+                tempMap = forwardChecking(selectedCell, (Map) map.clone());
+                if (tempMap != null) {
+                    answer = solve((Map) tempMap);
                     if (answer) return true;
                 }
                 selectedCell.setIsSet(true);
                 selectedCell.setBlacked(true);
-                m = forwardChecking(selectedCell, (Map) map.clone());
-                if (m == null) {
+                tempMap = forwardChecking(selectedCell, (Map) map.clone());
+                if (tempMap == null) {
                     return false;
                 }
-                answer = solve((Map) m);
+                answer = solve((Map) tempMap);
                 if (answer) {
                     return true;
                 } else {
@@ -110,22 +110,6 @@ public class Backtracking {
 
     private Cell MRV(Map map) {
 
-
-//        for (Cell[] row : map.getTable()) {
-//            for (Cell cell : row) {
-//                if (cell.getDomainLength() == 1 && !cell.isSet()) {
-//                    return cell;
-//                }
-//            }
-//        }
-
-//        for (Cell[] row : map.getTable()) {
-//            for (Cell cell : row) {
-//                if (cell.getDomainLength() == 2 && !cell.isSet()) {
-//                    return cell;
-//                }
-//            }
-//        }
         for (Cell[] row : map.getTable()) {
             for (Cell cell : row) {
                 if (cell.getDomainLength() == 1 && !cell.isSet()) {
@@ -184,56 +168,10 @@ public class Backtracking {
         }
 
         return null;
-        // for (int i = 0; i<)
-
-//        for (int conditionCount = map.getDimension(); conditionCount >= map.getDimension() / 2; conditionCount--) {
-//            for (int i = 0; i < map.getDimension(); i++) {
-//                if (map.differencesPaintedAndRemainingCell(i) == conditionCount && !map.isRowCompleted(i)) {
-//                    Cell[] row = map.getTable()[i];
-//                    for (int j = 0; j < row.length; j++) {
-//                        if (!row[j].isSet()) {
-//                            return row[j];
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//
-//
-//        int bestRow = 0;
-////        while (bestRow < map.getDimension() && map.differencesPaintedAndRemainingCell(bestRow) == 0 && !map.isRowCompleted(bestRow)) {
-////            bestRow++;
-////        }
-////        if(bestRow>=map.getDimension()){
-////            return null;
-////        }
-//        for (int i = 0; i < map.getDimension(); i++) {
-//            int diff = map.differencesPaintedAndRemainingCell(i);
-//            if (diff < map.differencesPaintedAndRemainingCell(bestRow) && diff > 0) {
-//                bestRow = i;
-//            }
-//        }
-//
-//        Cell[] selectedRow = map.getTable()[bestRow];
-//        int bestCell = map.getDimension() + 1;
-//        for (int i = 0; i < map.getDimension(); i++) {
-//            int diff = map.differencesPaintedAndRemainingCellInCol(i);
-//            if (!selectedRow[i].isSet() && diff < bestCell && diff != 0) {
-//                bestCell = i;
-//            }
-//        }
-//        if (bestCell < map.getDimension()) {
-//            return selectedRow[bestCell];
-//        }
-//
-//        return null;
     }
 
     private int LCV(Cell cell, Map map) {
         // returns 1 for black decision and 2 for white and 3 is for both...
-//        if (!isSolved){
-//            return 1;
-//        }
 
         if (cell.canBeBlack() && !cell.canBeWhite()) {
             return 1;
@@ -312,9 +250,7 @@ public class Backtracking {
     }
 
     private Map LCVDomainResolver(Cell cell, Map map) {
-//        System.out.println("forward started");
-//        map.print();
-        b++;
+
         int[] rowConditions = map.getRowCondition(cell.getX());
         int[] colConditions = map.getColCondition(cell.getY());
         ArrayList<Integer> rowConArray = new ArrayList<Integer>();
@@ -365,16 +301,8 @@ public class Backtracking {
             }
         }
 
-//        System.out.println("before recursive");
-//        map.print();
-
-
         recursiveFunction(rowConArray, normRow, 0, row, map.countOfCellShouldBeBlackInRow(cell.getX()));
         recursiveFunction(colConArray, normCol, 0, column, map.countOfCellShouldBeBlackInCol(cell.getY()));
-
-
-//        System.out.println("returned map------------->>>>>>>>>");
-//        map.print();
 
         return map;
     }
@@ -383,9 +311,6 @@ public class Backtracking {
     public static int b = 0;
 
     private Map forwardChecking(Cell cell, Map map) {
-//        System.out.println("forward started");
-//        map.print();
-        b++;
         int[] rowConditions = map.getRowCondition(cell.getX());
         int[] colConditions = map.getColCondition(cell.getY());
         ArrayList<Integer> rowConArray = new ArrayList<Integer>();
@@ -436,19 +361,12 @@ public class Backtracking {
             }
         }
 
-//        System.out.println("before recursive");
-//        map.print();
-
-
         if (!recursiveFunction(rowConArray, normRow, 0, row, map.countOfCellShouldBeBlackInRow(cell.getX())) ||
                 !recursiveFunction(colConArray, normCol, 0, column, map.countOfCellShouldBeBlackInCol(cell.getY()))) {
 
             return null;
 
         }
-//        System.out.println("returned map------------->>>>>>>>>");
-//        map.print();
-
         return map;
     }
 
@@ -513,10 +431,6 @@ public class Backtracking {
         Task:
         for (int i = start; i <= row.length - count; i++) {
             Cell[] temp = utils.copyOfCellArray(row);
-//            for (int k = start; k < i; k++) {
-//                temp[k].setIsSet(true);
-//                temp[k].setBlacked(false);
-//            }
             if (i > start && row[i - 1].isSet() && row[i - 1].isBlacked()) break;
             else {
 
@@ -533,10 +447,7 @@ public class Backtracking {
                     sw = true;
                 }
             }
-
-
         }
-
         return sw;
     }
 

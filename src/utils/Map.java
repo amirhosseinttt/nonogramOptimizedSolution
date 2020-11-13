@@ -51,83 +51,19 @@ public class Map implements Cloneable{
         this.table = table;
     }
 
-//    private void initCell(int x, int y) {
-//        // we should fill cells neighbours in here...
-//
-//        Cell cell = this.table[x][y];
-//
-//        if (x > 0) {
-//            cell.setLeft(this.table[x - 1][y]);
-//        }
-//        if (y > 0) {
-//            cell.setUp(this.table[x][y - 1]);
-//        }
-//        if (x < this.dimension - 1) {
-//            cell.setRight(this.table[x + 1][y]);
-//        }
-//        if (x < this.dimension - 1) {
-//            cell.setDown(this.table[x][y + 1]);
-//        }
-//
-//        this.table[x][y] = cell;
-//    }
-
     public void print() {
         // this is a function in which we visualize the table in an user friendly way... :)
-        System.out.println("***********************************************************************");
-        System.out.println("-------conditions-------");
-        for (int[] row:this.conditions){
-            for (int adad:row){
-                System.out.print(adad+" ");
-            }
-            System.out.println();
-        }
-
-        System.out.println("-----main map-----");
+        System.out.println("---------------------------------------------------------------");
+        System.out.println("-------------------------**main map**--------------------------");
+        System.out.println();
         for (Cell[] rows : this.table) {
             for (Cell cell : rows) {
                 System.out.print(cell);
             }
             System.out.println();
         }
-        System.out.println("------cell domain------");
-        for (Cell[] rows : this.table) {
-            for (Cell cell : rows) {
-                System.out.print(cell.getDomainLength());
-            }
-            System.out.println();
-        }
-        System.out.println("----- is Black (0:false ...) ----");
-        for (Cell[] rows : this.table) {
-            for (Cell cell : rows) {
-                System.out.print(cell.isBlacked() ? "1":"0");
-            }
-            System.out.println();
-        }
-
-        System.out.println("----- is set (0:false ...) ----");
-        for (Cell[] rows : this.table) {
-            for (Cell cell : rows) {
-                System.out.print(cell.isSet() ? "1":"0");
-            }
-            System.out.println();
-        }
-        System.out.println("------cell domain------");
-        for (Cell[] rows : this.table) {
-            for (Cell cell : rows) {
-                System.out.print(cell.getDomainLength());
-            }
-            System.out.println();
-        }
-        System.out.println("----- is Black (0:false ...) ----");
-        for (Cell[] rows : this.table) {
-            for (Cell cell : rows) {
-                System.out.print(cell.isBlacked() ? "1":"0");
-            }
-            System.out.println();
-        }
-
-        System.out.println("***********************************************************************");
+        System.out.println();
+        System.out.println("---------------------------------------------------------------");
     }
 
     public Cell[][] getTable() {
@@ -143,14 +79,10 @@ public class Map implements Cloneable{
     }
 
     public int[] getRowCondition(int x) {
-        System.out.println("x: "+x+"  arrays  "+ Arrays.toString(this.conditions[x]));
         return conditions[x].length > 0 ? conditions[x] : null;
     }
 
-
     public int[] getColCondition(int y) {
-        System.out.println("y: "+y+"  arrays  "+ Arrays.toString(this.conditions[y]));
-
         return conditions[dimension + y].length > 0 ? conditions[dimension + y] : null;
     }
 
@@ -282,16 +214,7 @@ public class Map implements Cloneable{
         if (n>0){
             consecutiveBlackCells.add(n);
         }
-//        for (Cell cell : line) {
-//            int n = 0;
-//            while (cell.isBlacked()) {
-//                n++;
-//            }
-//            if (n > 0) {
-//                consecutiveBlackCells.add(n);
-//            }
-//            n=0;
-//        }
+
         int[] integers = new int[consecutiveBlackCells.size()];
         for (int i = 0;i<integers.length;i++){
             integers[i]=consecutiveBlackCells.get(i);
@@ -312,21 +235,6 @@ public class Map implements Cloneable{
     public boolean isComplete() {
         // this method returns true if and only if the overal number of blacked cells are equal to overal sum of
         // all constrains(conditions).
-        // alert
-//        int count=0;
-//        for (Cell[] rows : this.table) {
-//            for (Cell cell : rows) {
-//                if(cell.isBlacked()){
-//                    count++;
-//                }
-//            }
-//        }
-//
-//        for (int[] rows : conditions) {
-//            for (int cell : rows) {
-//                count-=cell;
-//            }
-//        }
 
         for (Cell[] rows : this.table) {
             for (Cell cell : rows) {
@@ -382,19 +290,7 @@ public class Map implements Cloneable{
         return this.isAcceptable() && this.isComplete();
     }
 
-    public int[][] getConditions() {
-        return conditions;
-    }
-
-    public void setConditions(int[][] conditions) {
-        this.conditions = conditions;
-    }
-
     public int getDimension() {
         return dimension;
-    }
-
-    public void setDimension(int dimension) {
-        this.dimension = dimension;
     }
 }

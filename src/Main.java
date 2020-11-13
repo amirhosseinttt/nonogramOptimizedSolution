@@ -27,7 +27,6 @@ public class Main {
 
     public static void main(String[] args) throws CloneNotSupportedException {
         Map map = getMapFromTerminal();
-        map.print();
         Backtracking backtracking = new Backtracking();
         try {
           System.out.println("start");
