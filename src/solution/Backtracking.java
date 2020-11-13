@@ -2,8 +2,8 @@ package solution;
 
 import org.jetbrains.annotations.NotNull;
 
-import utils.Cell;
-import utils.Map;
+import utils.*;
+
 
 
 import java.util.ArrayList;
@@ -25,7 +25,6 @@ public class Backtracking {
         if (map.isComplete()) {
             if (map.isAcceptable()) {
                 System.out.println("Founded!!");
-                map.print();
                 isSolved = true;
                 return true;
             }
@@ -61,7 +60,6 @@ public class Backtracking {
             case 2:
                 selectedCell.setIsSet(true);
                 selectedCell.setBlacked(false);
-                map.print();
                 m = forwardChecking(selectedCell, (Map) map.clone());
                 m.print();
                 if (m == null) {
@@ -268,6 +266,7 @@ public class Backtracking {
     public static int b = 0;
 
     private Map forwardChecking(Cell cell, Map map) {
+        System.out.println("forward started");
         map.print();
         b++;
         int[] rowConditions = map.getRowCondition(cell.getX());
@@ -305,10 +304,10 @@ public class Backtracking {
         Cell[] normRow = null, normCol = null;
         try {
 
-            normRow = normalizeForRecursiveFunction(row.clone());
 
-            normCol = normalizeForRecursiveFunction(column.clone());
+            normRow = normalizeForRecursiveFunction(utils.copyOfCellArray(row));
 
+            normCol = normalizeForRecursiveFunction(utils.copyOfCellArray(column));
         } catch (Exception e) {
             System.out.println(b);
             map.print();
@@ -316,16 +315,25 @@ public class Backtracking {
         }
 
 
-//        int rowBlackSupposedCount = 0;
-//        int colBlackSupposedCount = 0;
-//
-//
-//        for (int tmp : rowConditions) {
-//            rowBlackSupposedCount += tmp;
-//        }
-//        for (int tmp : colConditions) {
-//            colBlackSupposedCount += tmp;
-//        }
+        for (Cell tmpCell : row) {
+            if (!tmpCell.isSet()) {
+                if (tmpCell.canBeBlack() && tmpCell.canBeWhite()) {
+                    tmpCell.setCanBeWhite(false);
+                    tmpCell.setCanBeBlack(false);
+                }
+            }
+        }
+        for (Cell tmpCell : column) {
+            if (!tmpCell.isSet()) {
+                if (tmpCell.canBeBlack() && tmpCell.canBeWhite()) {
+                    tmpCell.setCanBeWhite(false);
+                    tmpCell.setCanBeBlack(false);
+                }
+            }
+        }
+
+        System.out.println("before recursive");
+        map.print();
 
 
         if (!recursiveFunction(rowConArray, normRow, 0, row, map.countOfCellShouldBeBlackInRow(cell.getX())) ||
@@ -339,6 +347,7 @@ public class Backtracking {
         }
         System.out.println("returned map------------->>>>>>>>>");
         map.print();
+
         return map;
     }
 
@@ -374,10 +383,11 @@ public class Backtracking {
 
             assert row.length == originalRow.length;
             if (count == blackSupposedCount) {
+                System.out.println("heeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
                 for (int i = 0; i < row.length; i++) {
                     if (row[i].isBlacked() && row[i].isSet()) {
                         originalRow[i].setCanBeBlack(true);
-                    } else if (!row[i].isBlacked()) {
+                    } else {
                         originalRow[i].setCanBeWhite(true);
                     }
                 }
@@ -398,11 +408,20 @@ public class Backtracking {
         }
         count += thisCondition;
 
+        System.out.println("count: "+count);
+
         boolean sw = false;
+
         Task:
-        for (int i = start; i < row.length - count; i++) {
-            Cell[] temp = row.clone();
-            if (i != start && row[i].isSet() && row[i].isBlacked()) {
+        for (int i = start; i <= row.length - count; i++) {
+            Cell[] temp = utils.copyOfCellArray(row);
+            for (int k=start;k<i;k++){
+                temp[k].setIsSet(true);
+                temp[k].setBlacked(false);
+            }
+
+            if (i==start||(i != start && !(row[i-1].isSet() && row[i-1].isBlacked()))) {
+
                 for (int j = i; j < i + thisCondition; j++) {
 
                     if (temp[j].isSet() && !temp[j].isBlacked()) {
