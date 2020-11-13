@@ -315,8 +315,8 @@ public class Backtracking {
     public static int b = 0;
 
     private Map forwardChecking(Cell cell, Map map) {
-        System.out.println("forward started");
-        map.print();
+//        System.out.println("forward started");
+//        map.print();
         b++;
         int[] rowConditions = map.getRowCondition(cell.getX());
         int[] colConditions = map.getColCondition(cell.getY());
@@ -381,8 +381,8 @@ public class Backtracking {
             }
         }
 
-        System.out.println("before recursive");
-        map.print();
+//        System.out.println("before recursive");
+//        map.print();
 
 
         if (!recursiveFunction(rowConArray, normRow, 0, row, map.countOfCellShouldBeBlackInRow(cell.getX())) ||
@@ -393,8 +393,8 @@ public class Backtracking {
             return null;
 
         }
-        System.out.println("returned map------------->>>>>>>>>");
-        map.print();
+//        System.out.println("returned map------------->>>>>>>>>");
+//        map.print();
 
         return map;
     }
