@@ -123,6 +123,13 @@ public class Backtracking {
 //                }
 //            }
 //        }
+        for (Cell[] row : map.getTable()) {
+            for (Cell cell : row) {
+                if (cell.getDomainLength() == 1 && !cell.isSet()) {
+                    return cell;
+                }
+            }
+        }
 
         for (int conditionCount = map.getDimension(); conditionCount >= map.getDimension() / 2; conditionCount--) {
             for (int i = 0; i < map.getDimension(); i++) {
@@ -165,13 +172,7 @@ public class Backtracking {
         }
 
 
-        for (Cell[] row : map.getTable()) {
-            for (Cell cell : row) {
-                if (cell.getDomainLength() == 1 && !cell.isSet()) {
-                    return cell;
-                }
-            }
-        }
+
 
         for (Cell[] row : map.getTable()) {
             for (Cell cell : row) {
@@ -233,13 +234,13 @@ public class Backtracking {
 //            return 1;
 //        }
 
-        if (cell.canBeBlack() && !cell.canBeWhite()) {
+        if (cell.canBeBlack() && !cell.canBeWhite()&& false) {
             System.out.println("just black");
             return 1;
-        } else if (!cell.canBeBlack() && cell.canBeWhite()) {
+        } else if (!cell.canBeBlack() && cell.canBeWhite() && false) {
             System.out.println("just white");
             return 2;
-        } else if (!cell.canBeWhite() && !cell.canBeBlack()) {
+        } else if (!cell.canBeWhite() && !cell.canBeBlack() && false) {
             System.err.println("something went wrong. it shouldn't be like this!");
             return -1;
         } else {
