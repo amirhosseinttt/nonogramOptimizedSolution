@@ -329,7 +329,7 @@ public class Map implements Cloneable{
             int n = this.conditions[i].length;
             rules[i]= new int[n];
             for (int j =0; j< n ; j++){
-                rules[i][j]= this.conditions[i][j];
+                 rules[i][j]= this.conditions[i][j];
             }
         }
 
