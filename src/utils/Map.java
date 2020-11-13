@@ -101,6 +101,22 @@ public class Map implements Cloneable{
             }
             System.out.println();
         }
+        System.out.println("------cell domain------");
+        for (Cell[] rows : this.table) {
+            for (Cell cell : rows) {
+                System.out.print(cell.getDomainLength());
+            }
+            System.out.println();
+        }
+        System.out.println("----- is Black (0:false ...) ----");
+        for (Cell[] rows : this.table) {
+            for (Cell cell : rows) {
+                System.out.print(cell.isBlacked() ? "1":"0");
+            }
+            System.out.println();
+        }
+
+        System.out.println("***********************************************************************");
     }
 
     public Cell[][] getTable() {

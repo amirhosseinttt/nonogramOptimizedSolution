@@ -1,14 +1,12 @@
 package solution;
 
 import org.jetbrains.annotations.NotNull;
-import org.w3c.dom.ls.LSOutput;
+
 import utils.Cell;
 import utils.Map;
 
-import java.lang.reflect.Array;
+
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 
 public class Backtracking {
 
@@ -185,8 +183,14 @@ public class Backtracking {
 //            return 1;
 //        }
 
-        if (cell.canBeBlack() && !cell.canBeWhite()) return 1;
-        else if (!cell.canBeBlack() && cell.canBeWhite()) return 2;
+        if (cell.canBeBlack() && !cell.canBeWhite()) {
+            System.out.println("just black");
+            return 1;
+        }
+        else if (!cell.canBeBlack() && cell.canBeWhite()) {
+            System.out.println("just white");
+            return 2;
+        }
         else if (!cell.canBeWhite() && !cell.canBeBlack()) {
             System.err.println("something went wrong. it shouldn't be like this!");
             return -1;
@@ -298,8 +302,11 @@ public class Backtracking {
 
         Cell[] normRow = null, normCol = null;
         try {
+
             normRow = normalizeForRecursiveFunction(row.clone());
+
             normCol = normalizeForRecursiveFunction(column.clone());
+
         } catch (Exception e) {
             System.out.println(b);
             e.printStackTrace();
@@ -329,7 +336,6 @@ public class Backtracking {
     private Cell[] normalizeForRecursiveFunction(Cell[] cells) throws Exception {
         for (Cell tmpCell : cells) {
             if (!tmpCell.isSet()) {
-                System.out.println(tmpCell.getX() + " " + tmpCell.getY());
 
                 if (tmpCell.canBeBlack() && tmpCell.canBeWhite()) {
                     tmpCell.setCanBeWhite(false);
