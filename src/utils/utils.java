@@ -1,5 +1,7 @@
 package utils;
 
+import java.util.ArrayList;
+
 public class utils {
     public static Cell[] copyOfCellArray(Cell[] line) {
         Cell[] cells = new Cell[line.length];
@@ -11,5 +13,14 @@ public class utils {
             cells[i].setIsSet(line[i].isSet());
         }
         return cells;
+    }
+
+    public static ArrayList<Integer> copyOfIntArrayList(ArrayList<Integer> array){
+        ArrayList<Integer> copy = new ArrayList<>();
+        for (int i =0;i<array.size();i++){
+            int temp =array.get(i);
+            copy.add(temp);
+        }
+        return copy;
     }
 }
