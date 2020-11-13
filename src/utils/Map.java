@@ -173,6 +173,16 @@ public class Map implements Cloneable{
         return differencesPaintedAndRemainingCell(row)==0;
     }
 
+    public boolean isSetAllCellInRow(int row){
+        Cell[] cells = this.table[row];
+        for (int i =0 ; i< cells.length ;i++){
+            if(!cells[i].isSet()){
+                return false;
+            }
+        }
+        return true;
+    }
+
     public int countOfColoredCellInCol(int col){
         int count =0;
         for (int i =0; i<this.dimension; i++ ){
