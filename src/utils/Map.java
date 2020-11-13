@@ -138,7 +138,6 @@ public class Map implements Cloneable{
 
 
     public int[] getColCondition(int y) {
-        System.out.println(Arrays.toString(conditions[dimension + y])+" fuck "+y);
         return conditions[dimension + y].length > 0 ? conditions[dimension + y] : null;
     }
 

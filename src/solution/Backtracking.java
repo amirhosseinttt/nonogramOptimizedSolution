@@ -14,8 +14,6 @@ public class Backtracking {
     public static int a = 0;
 
     public boolean solve(@NotNull Map map) throws CloneNotSupportedException {
-        System.out.println("-------------");
-
         a++;
         if (isSolved) {
             return false;
