@@ -61,7 +61,6 @@ public class Backtracking {
                 selectedCell.setIsSet(true);
                 selectedCell.setBlacked(false);
                 m = forwardChecking(selectedCell, (Map) map.clone());
-                m.print();
                 if (m == null) {
                     return false;
                 }
