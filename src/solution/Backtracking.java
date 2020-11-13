@@ -23,7 +23,9 @@ public class Backtracking {
 
         if (map.isComplete()) {
             if (map.isAcceptable()) {
+
                 System.out.println("Founded!!");
+
                 isSolved = true;
                 return true;
             }
@@ -234,10 +236,8 @@ public class Backtracking {
 //        }
 
         if (cell.canBeBlack() && !cell.canBeWhite()) {
-            System.out.println("just black");
             return 1;
         } else if (!cell.canBeBlack() && cell.canBeWhite()) {
-            System.out.println("just white");
             return 2;
         } else if (!cell.canBeWhite() && !cell.canBeBlack()) {
             System.err.println("something went wrong. it shouldn't be like this!");
@@ -320,7 +320,6 @@ public class Backtracking {
         b++;
         int[] rowConditions = map.getRowCondition(cell.getX());
         int[] colConditions = map.getColCondition(cell.getY());
-        System.out.println("x: " + cell.getX() + " y: " + cell.getY());
         ArrayList<Integer> rowConArray = new ArrayList<Integer>();
         if (rowConditions != null) {
             for (int con : rowConditions) {
@@ -358,7 +357,6 @@ public class Backtracking {
 
             normCol = normalizeForRecursiveFunction(utils.copyOfCellArray(column));
         } catch (Exception e) {
-            System.out.println(b);
             map.print();
             e.printStackTrace();
         }
@@ -388,7 +386,6 @@ public class Backtracking {
         if (!recursiveFunction(rowConArray, normRow, 0, row, map.countOfCellShouldBeBlackInRow(cell.getX())) ||
                 !recursiveFunction(colConArray, normCol, 0, column, map.countOfCellShouldBeBlackInCol(cell.getY()))) {
             for (int i = 0; i < 10; i++) {
-                System.out.println("nuuuuuuuuuuuuuuuuul");
             }
             return null;
 
@@ -431,7 +428,6 @@ public class Backtracking {
 
             assert row.length == originalRow.length;
             if (count == blackSupposedCount) {
-                System.out.println("heeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
                 for (int i = 0; i < row.length; i++) {
                     if (row[i].isBlacked() && row[i].isSet()) {
                         originalRow[i].setCanBeBlack(true);
@@ -441,7 +437,6 @@ public class Backtracking {
                 }
                 return true;
             } else {
-                System.out.println(count + " c");
                 return false;
             }
         }
@@ -456,7 +451,6 @@ public class Backtracking {
         }
         count += thisCondition;
 
-        System.out.println("count: " + count);
 
         boolean sw = false;
 
@@ -479,7 +473,6 @@ public class Backtracking {
                     temp[j].setIsSet(true);
                     temp[j].setBlacked(true);
                 }
-                System.out.println(Arrays.toString(temp));
                 if (recursiveFunction(utils.copyOfIntArrayList(remainingConditions), utils.copyOfCellArray(temp), i + thisCondition + 1, originalRow, blackSupposedCount)) {
                     sw = true;
                 }
