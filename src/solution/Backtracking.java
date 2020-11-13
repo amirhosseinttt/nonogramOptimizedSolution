@@ -38,12 +38,6 @@ public class Backtracking {
 
 
         int choice = LCV(selectedCell, (Map) map.clone());
-//               selectedCell.setIsSet(true);
-//               selectedCell.setBlacked(true);
-//               solve((Map)map.clone());
-//               selectedCell.setIsSet(true);
-//               selectedCell.setBlacked(false);
-//               return solve((Map)map.clone());
         boolean answer;
 
         Map m = null;
@@ -114,6 +108,64 @@ public class Backtracking {
     }
 
     private Cell MRV(Map map) {
+
+
+//        for (Cell[] row : map.getTable()) {
+//            for (Cell cell : row) {
+//                if (cell.getDomainLength() == 1 && !cell.isSet()) {
+//                    return cell;
+//                }
+//            }
+//        }
+
+//        for (Cell[] row : map.getTable()) {
+//            for (Cell cell : row) {
+//                if (cell.getDomainLength() == 2 && !cell.isSet()) {
+//                    return cell;
+//                }
+//            }
+//        }
+
+        for (int conditionCount = map.getDimension(); conditionCount >= map.getDimension() / 2; conditionCount--) {
+            for (int i = 0; i < map.getDimension(); i++) {
+                if (map.differencesPaintedAndRemainingCell(i) == conditionCount) {
+                    Cell[] row = map.getTable()[i];
+                    for (int j = 0; j < row.length; j++) {
+                        if (!row[j].isSet()) {
+                            return row[j];
+                        }
+                    }
+                }
+            }
+        }
+
+
+        int bestRow = 0;
+        while (bestRow < map.getDimension() && map.isSetAllCellInRow(bestRow)) {
+            bestRow++;
+        }
+        if(bestRow>=map.getDimension()){
+            return null;
+        }
+        for (int i = 0; i < map.getDimension(); i++) {
+            int diff = map.differencesPaintedAndRemainingCell(i);
+            if (diff < map.differencesPaintedAndRemainingCell(bestRow) && diff > 0) {
+                bestRow = i;
+            }
+        }
+
+        Cell[] selectedRow = map.getTable()[bestRow];
+        int bestCell = map.getDimension() + 1;
+        for (int i = 0; i < map.getDimension(); i++) {
+            int diff = map.differencesPaintedAndRemainingCellInCol(i);
+            if (!selectedRow[i].isSet() && diff < bestCell && diff != 0) {
+                bestCell = i;
+            }
+        }
+        if (bestCell < map.getDimension()) {
+            return selectedRow[bestCell];
+        }
+
 
         for (Cell[] row : map.getTable()) {
             for (Cell cell : row) {

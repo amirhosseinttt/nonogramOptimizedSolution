@@ -1,6 +1,7 @@
 package utils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Map implements Cloneable{
     private Cell[][] table;
@@ -135,7 +136,9 @@ public class Map implements Cloneable{
         return conditions[x].length > 0 ? conditions[x] : null;
     }
 
+
     public int[] getColCondition(int y) {
+        System.out.println(Arrays.toString(conditions[dimension + y])+" fuck "+y);
         return conditions[dimension + y].length > 0 ? conditions[dimension + y] : null;
     }
 
