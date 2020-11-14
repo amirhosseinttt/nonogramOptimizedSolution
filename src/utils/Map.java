@@ -184,7 +184,7 @@ public class Map implements Cloneable{
 
 
 
-    private boolean checkAcceptableLine(Cell[] line, int[] condition) {
+    public boolean checkAcceptableLine(Cell[] line, int[] condition) {
         int[] consecutiveBlackCells = getContinuesBlackCells(line);
         if (condition.length != consecutiveBlackCells.length) {
             return false;
@@ -195,6 +195,19 @@ public class Map implements Cloneable{
             }
         }
         return true;
+    }
+
+    public boolean checkConsistency(Cell[] line, int[] condition){
+        int[] consecutiveBlackCells = getContinuesBlackCells(line);
+        if (condition!=null)
+        for (int i = 0; i < condition.length && consecutiveBlackCells.length>i; i++) {
+            if (consecutiveBlackCells[i] > condition[i]) {
+                return false;
+            }
+        }
+
+        return true;
+
     }
 
     private int[] getContinuesBlackCells(Cell[] line) {

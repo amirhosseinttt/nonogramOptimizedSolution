@@ -12,10 +12,10 @@ import java.util.Arrays;
 public class Backtracking {
 
     static boolean isSolved = false;
-    public static int a = 0;
+
 
     public boolean solve(@NotNull Map map) throws CloneNotSupportedException {
-        a++;
+
         if (isSolved) {
             return false;
         }
@@ -450,6 +450,44 @@ public class Backtracking {
             }
         }
         return sw;
+    }
+
+    public static int arc =0;
+    public boolean arc(Map mainMap){
+        Map map=null;
+        try {
+             map = (Map)mainMap.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+
+
+        Cell[][] cells = map.getTable();
+        for (int i=0 ; i<cells.length;i++){
+            for(int j=0;j<cells[i].length;j++){
+                if(cells[i][j].getDomainLength()==1){
+                    cells[i][j].color();
+                }else if(cells[i][j].getDomainLength()==0){
+                    arc++;
+                    return false;
+                }
+            }
+        }
+
+        for (int i =0 ; i<cells.length;i++){
+            if(!map.checkConsistency(map.getRow(i),map.getRowCondition(i))){
+                arc++;
+                return false;
+            }
+        }
+
+        for (int i = 0 ; i<cells.length;i++){
+            if(!map.checkConsistency(map.getColumn(cells,i),map.getColCondition(i))){
+                arc++;
+                return false;
+            }
+        }
+        return true;
     }
 
 }

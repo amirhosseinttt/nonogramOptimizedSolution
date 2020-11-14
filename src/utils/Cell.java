@@ -75,6 +75,13 @@ public class Cell {
         return isSet;
     }
 
+    public void color(){
+        if(canBeBlack){
+            isBlacked=true;
+        }
+        isSet=true;
+    }
+
     public void setSet(boolean isSet) {
         this.isSet = isSet;
     }

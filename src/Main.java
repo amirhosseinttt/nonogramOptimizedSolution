@@ -37,6 +37,5 @@ public class Main {
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
         }
-       // System.out.println(Backtracking.a);
     }
 }
